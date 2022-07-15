@@ -1,11 +1,14 @@
 package com.store.net.demo.Service;
 
+import com.store.net.demo.Excption.BadResourceException;
+import com.store.net.demo.Excption.ResourceNotFoundException;
 import com.store.net.demo.repository.UserRepository;
 import com.store.net.demo.DTO.UserDTO;
 import com.store.net.demo.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -48,6 +51,27 @@ public class UserService {
 
         }
         return userDTO;
+    }
+
+    public void edit(User user) throws ResourceNotFoundException, BadResourceException {
+        if(!StringUtils.isEmpty(user.getId())){
+            if(!existsById(user.getId())){
+                throw new ResourceNotFoundException("Usuario não encontrado com o id: " + user.getId());
+            }
+            userRepository.save(user);
+        }else {
+            BadResourceException exc = new BadResourceException("Falha ao salvar o usuario");
+            exc.addErrorMessage("Usuario está nulo ou em branco");
+            throw exc;
+        }
+    }
+
+    public void deletedById(Long id) throws ResourceNotFoundException{
+        if(!existsById(id)){
+            throw new ResourceNotFoundException("Usuario não encotrado com i id: " + id);
+        }else {
+            userRepository.deleteById(id);
+        }
     }
 
 
