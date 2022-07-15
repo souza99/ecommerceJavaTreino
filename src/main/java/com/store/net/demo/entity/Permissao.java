@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -28,5 +29,10 @@ public class Permissao implements Serializable {
 
     @Column(name = "tipo")
     private String tipo;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "permissao")
+    @JoinColumn(name = "usuario_id")
+    private List<User> usuarios;
+
 
 }

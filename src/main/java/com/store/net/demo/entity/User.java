@@ -31,4 +31,7 @@ public class User implements Serializable {
     @Column(name ="password")
     private String password;
 
+    @ManyToOne
+    private Permissao permissao;
+
 }
